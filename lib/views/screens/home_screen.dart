@@ -1,3 +1,4 @@
+import 'package:untitled8/views/components/app_project_list.dart';
 import 'package:untitled8/views/screens/project_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,18 +19,17 @@ class HomeScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const Text("Projects"),
-          actions: [
-           /* Padding(
-              padding: const EdgeInsets.only(right: 12),
-              child: CircleAvatar(
-                backgroundColor: Colors.grey[200],
-                child: const Icon(Icons.chat, color: Colors.black87),
-              ),
-            ),*/
+          leading: IconButton( // Left side button
+            icon: const Icon(Icons.notes),
+            onPressed: () {
+              Navigator.pushNamed(context, '/notes');
+            },
+          ),
+          actions: [ // Right side buttons
             IconButton(
-              icon: const Icon(Icons.notes),
+              icon: const Icon(Icons.person),
               onPressed: () {
-                Navigator.pushNamed(context, '/notes');
+                Navigator.pushNamed(context, '/registers');
               },
             ),
           ],
@@ -46,52 +46,7 @@ class HomeScreen extends StatelessWidget {
                 return const Center(child: Text("No projects found."));
               }
 
-              return ListView.builder(
-                padding: const EdgeInsets.all(16),
-                itemCount: projects.length,
-                itemBuilder: (context, index) {
-                  Project project = projects[index];
-                  return ProjectCard(
-                    title: project.title ?? "No title",
-                    description: project.description ?? "No description",
-                    teamCount: project.users?.length ?? 0,
-                    startDate: project.startAt ?? DateTime.now(),
-                    deadline: project.endAt ?? DateTime.now(),
-                    projectId: project.projectId ?? '', // Pass the project ID
-                    onTap: () {
-                      Navigator.pushNamed(
-                        context,
-                        '/project_details',
-                        arguments: project, // Pass the full project object
-                      );
-                    },
-                   /* onAddTask: () {
-                      // Navigate to Add Task screen with project ID
-                      print('Project ID being sent: ${project.projectId}');
-                      print('Project object: $project');
-
-                      Navigator.pushNamed(
-                        context,
-                        '/add_task',
-                        arguments: project.projectId, // Pass project ID as argument
-                      );
-
-                    },*/
-                   /* onListTask: () {
-                      // Navigate to Add Task screen with project ID
-                      print('Project ID being sent: ${project.projectId}');
-                      print('Project object: $project');
-
-                      Navigator.pushNamed(
-                        context,
-                        '/taskList',
-                        arguments: project.projectId, // Pass project ID as argument
-                      );
-
-                    },*/
-                  );
-                },
-              );
+              return AppProjectList(projects: projects);
             }  else {
               return const SizedBox();
             }
